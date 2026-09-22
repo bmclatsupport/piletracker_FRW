@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PileHQ</title>
+<!--
+  Anything on this site that is not a real file lands here, and this sends it to the app.
+
+  It exists because a home-screen icon remembers the address it was created from. Rename a
+  file, or fix a manifest, and every icon already on a crew's phone still asks for the old
+  address — and a hosting 404 page is a dead end in the field, with no way back to the app.
+  This turns that into a redirect instead. Old bookmarks and old icons keep working.
+
+  The guard below matters: if the app itself were ever missing, redirecting to it would bring
+  the browser straight back here, and it would loop until the tab gave up. So it only
+  redirects when the address asked for was something other than the app's own folder.
+-->
+<style>
+  html, body { margin: 0; height: 100%; background: #00263A; color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+  main { min-height: 100%; box-sizing: border-box; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 14px; padding: 28px; text-align: center; }
+  h1 { font-size: 17px; margin: 0; letter-spacing: .02em; }
+  p { margin: 0; font-size: 13px; line-height: 1.5; color: #A5BAC9; max-width: 30em; }
+  a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; margin-top: 6px;
+    border-radius: 10px; background: #E35205; color: #fff; font-weight: 700; font-size: 15px;
+    text-decoration: none; }
+  code { color: #FFB71B; font-size: 12px; word-break: break-all; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Taking you to PileHQ</h1>
+  <p id="why">One moment.</p>
+  <a href="./" id="go">Open PileHQ</a>
+  <p><code id="asked"></code></p>
+</main>
+<script>
+  (function () {
+    var here = location.pathname;
+    /* the app's own folder — everything up to and including the last slash */
+    var app = here.replace(/[^\/]*$/, "");
+    document.getElementById("asked").textContent = here;
+    document.getElementById("go").setAttribute("href", app);
+    if (here === app) {
+      /* asking for the folder itself already failed, so the app is genuinely not there.
+         Redirecting would loop. Say so plainly instead. */
+      document.getElementById("why").textContent =
+        "There is no index.html at this address. Check the file list in the repository: if it "
+        + "reads INDEX~1.HTM, Windows shortened the names during upload — rename it to "
+        + "index.html and the site comes back.";
+      return;
+    }
+    document.getElementById("why").textContent =
+      "That address has moved. Opening the app from " + app;
+    location.replace(app);
+  })();
+</script>
+</body>
+</html>
